@@ -1,0 +1,11 @@
+{
+  "note": 0,
+  "note_max": 100,
+  "details": [
+    {
+      "test": "Compilation",
+      "statut": "ERREUR: [WinError 2] The system cannot find the file specified",
+      "points": 0
+    }
+  ]
+}

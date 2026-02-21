@@ -1,0 +1,253 @@
+{
+  "description": "Résultats attendus pour les tests TP1 - Système de Transport Concurrent",
+  "version": "2.0",
+  "date_creation": "2025-12-27",
+  
+  "tests": {
+    "scenario_simple": {
+      "fichier_csv": "scenario_simple.csv",
+      "description": "Test basique - 3 passagers, 2 bus, trajectoire simple",
+      "points_max": 15,
+      "test_stabilite": false,
+      "resultats": {
+        "revenus_total": 7.50,
+        "passagers_transportes": 3,
+        "total_montees": 3,
+        "total_descentes": 3,
+        "occupation_bus": {
+          "B011": 0,
+          "B012": 0
+        },
+        "invariant_conservation": true,
+        "revenus_methode": {
+          "CARTE": 5.00,
+          "ESPECES": 2.50
+        },
+        "occupation_max": {
+          "B011": 2,
+          "B012": 1
+        },
+        "embarq_arret": {
+          "Universite": 2,
+          "Cegep": 1
+        },
+        "debarq_arret": {
+          "Centre-ville": 2,
+          "Gare": 1
+        }
+      }
+    },
+    
+    "scenario_compteurs": {
+      "fichier_csv": "scenario_compteurs.csv",
+      "description": "Test race conditions - 50 passagers, timestamps simultanés",
+      "points_max": 15,
+      "test_stabilite": true,
+      "nb_repetitions": 3,
+      "resultats": {
+        "revenus_total": 125.00,
+        "passagers_transportes": 50,
+        "total_montees": 50,
+        "total_descentes": 50,
+        "occupation_bus": {
+          "B021": 0,
+          "B022": 0,
+          "B023": 0,
+          "B024": 0,
+          "B025": 0
+        },
+        "invariant_conservation": true,
+        "revenus_methode": {
+          "CARTE": 125.00
+        },
+        "occupation_max": {
+          "B021": 10,
+          "B022": 10,
+          "B023": 10,
+          "B024": 10,
+          "B025": 10
+        },
+        "embarq_arret": {
+          "Rock-Forest": 50
+        },
+        "debarq_arret": {
+          "Jacques-Cartier": 50
+        }
+      }
+    },
+    
+    "scenario_capacite": {
+      "fichier_csv": "scenario_capacite.csv",
+      "description": "Test gestion capacité - Bus 50 places, 60 tentatives",
+      "points_max": 15,
+      "test_stabilite": false,
+      "resultats": {
+        "revenus_total": 150.00,
+        "passagers_transportes": 30,
+        "total_montees": 51,
+        "total_descentes": 30,
+        "occupation_bus": {
+          "B031": 21
+        },
+        "refus": {
+          "B031": 9
+        },
+        "alertes_90": {
+          "B031": true
+        },
+        "invariant_conservation": true,
+        "revenus_methode": {
+          "CARTE": 150.00
+        },
+        "occupation_max": {
+          "B031": 50
+        },
+        "embarq_arret": {
+          "Rock-Forest": 51
+        },
+        "debarq_arret": {
+          "Jacques-Cartier": 30
+        }
+      }
+    },
+    
+    "scenario_deadlock": {
+      "fichier_csv": "scenario_deadlock.csv",
+      "description": "Test absence deadlock - Transferts simultanés",
+      "points_max": 15,
+      "test_stabilite": true,
+      "nb_repetitions": 3,
+      "timeout_max": 10,
+      "resultats": {
+        "revenus_total": 25.00,
+        "passagers_transportes": 10,
+        "total_montees": 20,
+        "total_descentes": 10,
+        "occupation_bus": {
+          "B041": 0,
+          "B042": 10
+        },
+        "invariant_conservation": true,
+        "revenus_methode": {
+          "CARTE": 25.00
+        },
+        "occupation_max": {
+          "B041": 10,
+          "B042": 10
+        },
+        "embarq_arret": {
+          "Lennoxville": 10,
+          "Universite": 10
+        },
+        "debarq_arret": {
+          "Universite": 10
+        }
+      }
+    },
+    
+    "scenario_voyage": {
+      "fichier_csv": "scenario_voyage.csv",
+      "description": "Test logique métier - Patterns montée/descente variés",
+      "points_max": 15,
+      "test_stabilite": false,
+      "resultats": {
+        "revenus_total": 10.00,
+        "passagers_transportes": 2,
+        "total_montees": 4,
+        "total_descentes": 4,
+        "occupation_bus": {
+          "B051": 0,
+          "B052": 0
+        },
+        "invariant_conservation": true,
+        "revenus_methode": {
+          "CARTE": 10.00
+        },
+        "occupation_max": {
+          "B051": 2,
+          "B052": 1
+        },
+        "embarq_arret": {
+          "Universite": 3,
+          "Carrefour": 1
+        },
+        "debarq_arret": {
+          "Centre-ville": 2,
+          "Carrefour": 2
+        }
+      }
+    },
+    
+    "scenario_stress": {
+      "fichier_csv": "scenario_stress.csv",
+      "description": "Test robustesse - 200 passagers, 10 bus, haute concurrence",
+      "points_max": 15,
+      "test_stabilite": true,
+      "nb_repetitions": 5,
+      "resultats": {
+        "revenus_total": 500.00,
+        "passagers_transportes": 150,
+        "total_montees": 200,
+        "total_descentes": 150,
+        "occupation_bus": {
+          "B061": 5,
+          "B062": 5,
+          "B063": 5,
+          "B064": 5,
+          "B065": 5,
+          "B066": 5,
+          "B067": 5,
+          "B068": 5,
+          "B069": 5,
+          "B070": 5
+        },
+        "invariant_conservation": true,
+        "revenus_methode": {
+          "CARTE": 500.00
+        },
+        "occupation_max": {
+          "B061": 20,
+          "B062": 20,
+          "B063": 20,
+          "B064": 20,
+          "B065": 20,
+          "B066": 20,
+          "B067": 20,
+          "B068": 20,
+          "B069": 20,
+          "B070": 20
+        },
+        "embarq_arret": {
+          "Universite": 200
+        },
+        "debarq_arret": {
+          "Centre-ville": 150
+        }
+      }
+    }
+  },
+  
+  "notes": {
+    "compilation": "Pré-requis - échec = note 0",
+    "total_points": 100,
+    "repartition": {
+      "compilation": 10,
+      "scenario_simple": 15,
+      "scenario_compteurs": 15,
+      "scenario_capacite": 15,
+      "scenario_deadlock": 15,
+      "scenario_voyage": 15,
+      "scenario_stress": 15,
+      "calculs": 5
+    },
+    "calculs": {
+      "revenus_methode": 1,
+      "occupation_bus": 1,
+      "occupation_max": 1,
+      "embarq_arret": 1,
+      "debarq_arret": 1
+    },
+    "bonus_stabilite": "scenario_compteurs, scenario_deadlock, scenario_stress: +2 points si stable",
+    "penalite_instabilite": "scenario_compteurs, scenario_deadlock, scenario_stress: -5 points si instable"
+  }
+}
