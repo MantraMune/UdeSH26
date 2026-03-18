@@ -1,0 +1,3 @@
+type,throughput_lecture_ops_sec,throughput_ecriture_ops_sec
+synchronized,1089048,36
+rwlock,7447721,7
