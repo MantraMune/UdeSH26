@@ -1,0 +1,91 @@
+#version 460
+#extension GL_ARB_shader_draw_parameters : enable
+
+layout(local_size_x = 64) in;
+
+// ---- STRUCTS ----
+
+struct GPUBrick {
+    mat4 model;
+    vec3 min;
+    float pad1;
+    vec3 max;
+    float pad2;
+    int typeID; 
+    int pad3[3];
+};
+
+struct BrickMatrix {
+    mat4 model;
+    vec3 min;
+    float pad1;
+    vec3 max;
+    float pad2;
+    int typeID; 
+    int pad3[3];
+};
+
+struct DrawIndexedIndirectCommand {
+    uint indexCount;
+    uint instanceCount;
+    uint firstIndex;
+    int  vertexOffset;
+    uint firstInstance;
+};
+
+const uint MAX_INSTANCES_PER_TYPE = 10000;
+
+// ---- BUFFERS ----
+
+// Input
+layout(set = 0, binding = 0) readonly buffer BrickBuffer {
+    GPUBrick bricks[];
+};
+
+// Output visible instances
+layout(set = 0, binding = 1) buffer VisibleBuffer {
+    GPUBrick visible[];
+};
+
+// Indirect draw
+layout(set = 0, binding = 2) buffer IndirectBuffer {
+    DrawIndexedIndirectCommand cmds[];
+};
+
+// Camera UBO
+layout(set = 0, binding = 4) uniform ViewUBO {
+    mat4 view;
+    mat4 projection;
+    vec4 cameraPosition;
+    float near;
+    float far;
+} viewUbo;
+
+bool isVisible(vec4 pos, float radius) {
+    vec4 clipPos = (viewUbo.projection * viewUbo.view) * pos;
+    float w = clipPos.w + radius;
+    return (clipPos.z > -radius) && (clipPos.z < w) && 
+           (abs(clipPos.x) < w) && (abs(clipPos.y) < w);
+}
+
+// ---- MAIN ----
+
+void main()
+{
+    uint id = gl_GlobalInvocationID.x;
+    if (id >= bricks.length()) return;
+
+    GPUBrick b = bricks[id];
+    
+    vec3 center = (b.min + b.max) * 0.5;
+    vec4 worldPos = b.model * vec4(center, 1.0);
+
+    if (!isVisible(worldPos, 5.0)) return; 
+
+    int type = b.typeID;
+    uint localIndex = atomicAdd(cmds[type].instanceCount, 1);
+    uint globalIndex = (type * MAX_INSTANCES_PER_TYPE) + localIndex;
+
+    visible[globalIndex].model = b.model;
+    visible[globalIndex].typeID = b.typeID; 
+}
