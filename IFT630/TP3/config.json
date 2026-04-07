@@ -1,0 +1,50 @@
+{
+  "broker": {
+    "host": "dinf-ift630.dinf.fsci.usherbrooke.ca",
+    "port": 1883,
+    "username": "ift630",
+    "password": "ift630",
+    "keepalive": 60
+  },
+  "topics": {
+    "realtime": "ift630/transport/realtime",
+    "batch": "ift630/transport/batch",
+    "interval": "ift630/transport/interval"
+  },
+  "frequencies": {
+    "realtime_per_second": 15,
+    "batch_count": 200,
+    "batch_interval_seconds": 10,
+    "interval_count": 50,
+    "interval_seconds": 5
+  },
+  "qos": {
+    "realtime": 1,
+    "batch": 2,
+    "interval": 1
+  },
+  "data": {
+    "bus_lines": [1, 2, 3, 5, 7, 8, 10, 15, 20, 25],
+    "bus_ids": 50,
+    "stops": [
+      "Université",
+      "Carrefour Belvedère",
+      "Centre-ville",
+      "Campus",
+      "Hôpital Hôtel-Dieu",
+      "Hôpital CHUS Fleurimont",
+      "Dépôt",
+      "CEGEP",
+      "Bibliothèque",
+      "Parc Central",
+      "Musée",
+      "Mairie",
+      "Carrefour de l'Estrie"
+    ],
+    "payment_distribution": {
+      "carte": 0.60,
+      "cash": 0.35,
+      "mobile": 0.10
+    }
+  }
+}
