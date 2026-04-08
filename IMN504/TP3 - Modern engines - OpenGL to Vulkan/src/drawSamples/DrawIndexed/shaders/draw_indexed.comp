@@ -11,17 +11,7 @@ struct GPUBrick {
     float pad1;
     vec3 max;
     float pad2;
-    int typeID; 
-    int pad3[3];
-};
-
-struct BrickMatrix {
-    mat4 model;
-    vec3 min;
-    float pad1;
-    vec3 max;
-    float pad2;
-    int typeID; 
+    float typeID; 
     int pad3[3];
 };
 
@@ -63,9 +53,15 @@ layout(set = 0, binding = 4) uniform ViewUBO {
 
 bool isVisible(vec4 pos, float radius) {
     vec4 clipPos = (viewUbo.projection * viewUbo.view) * pos;
+
     float w = clipPos.w + radius;
-    return (clipPos.z > -radius) && (clipPos.z < w) && 
-           (abs(clipPos.x) < w) && (abs(clipPos.y) < w);
+
+    // Check against X and Y (-w to w) and Z (0 to w)
+    bool insideX = (clipPos.x >= -w) && (clipPos.x <= w);
+    bool insideY = (clipPos.y >= -w) && (clipPos.y <= w);
+    bool insideZ = (clipPos.z >= -radius) && (clipPos.z <= w);
+
+    return insideX && insideY && insideZ;
 }
 
 // ---- MAIN ----
@@ -82,7 +78,11 @@ void main()
 
     if (!isVisible(worldPos, 5.0)) return; 
 
-    int type = b.typeID;
+    int type = int(b.typeID);
+
+    // Safety check: ensure the type is within valid bounds [0, 4]
+    if (type < 0 || type >= 5) return;
+
     uint localIndex = atomicAdd(cmds[type].instanceCount, 1);
     uint globalIndex = (type * MAX_INSTANCES_PER_TYPE) + localIndex;
 
